@@ -1,23 +1,23 @@
-import Container from './components/Container.tsx';
 import Header from './components/Header.tsx';
+import StartScreen from './components/StartScreen.tsx';
+import Footer from './components/Footer.tsx';
 
 function App() {
     return (
         <>
             <div className="flex h-screen flex-col">
                 <Header />
-                <Container>
-                    {/* Main Space */}
-                    <main className="grow">
-                        <div className="flex h-full items-center justify-center">
-                            <h1 className="text-4xl font-bold">Hello World!</h1>
-                        </div>
-                    </main>
+                {/* Main Space */}
+                <main className="grow">
+                    {/*<Game />*/}
+                    <StartScreen />
+                    {/*<Container>*/}
+                    {/*</Container>*/}
+                </main>
 
-                    {/*<div className="justify-self-end">*/}
-                    {/*    <MarketingFooter />*/}
-                    {/*</div>*/}
-                </Container>
+                <div className="justify-self-end">
+                    <Footer />
+                </div>
             </div>
         </>
     );
