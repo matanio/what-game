@@ -2,7 +2,7 @@ import Container from './Container.tsx';
 
 export default function Footer() {
     return (
-        <footer className=" bg-slate-300 py-8">
+        <footer className="bg-slate-200 py-8">
             <Container>
                 <div className="flex justify-center">
                     <p className="text-sm">
