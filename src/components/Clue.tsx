@@ -1,4 +1,4 @@
-import { getClue } from '../lib/game.ts';
+import { getClue, NotFoundError } from '../lib/game.ts';
 import { useEffect, useState } from 'react';
 
 interface ClueProps {
@@ -15,7 +15,12 @@ export default function Clue({ attempt }: ClueProps) {
             setClue(newClue);
             setError(null);
         } catch (error) {
-            setError(`Hmm. Looks like there aren't any clues for this one.`);
+            if (error instanceof NotFoundError) {
+                // TODO: handle error
+                setError('No data available for today...');
+                return;
+            }
+            setError((error as Error).message);
         }
     }, [attempt]);
 
