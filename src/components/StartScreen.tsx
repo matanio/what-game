@@ -20,7 +20,7 @@ export default function StartScreen({ onStart }: StartScreenProps) {
                 >
                     Start
                 </button>
-                {/* Today's date */}
+                {/* WordToday's date */}
                 <div className="font-medium">March 31, 2024</div>
             </div>
         </section>

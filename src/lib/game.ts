@@ -1,4 +1,4 @@
-type WordInfo = {
+export type WordToday = {
     word: string;
     clues: Record<number, string>;
 };
@@ -14,52 +14,26 @@ export class NotFoundError extends Error {
  * @throws Error if no data available for the given date
  * @param date
  */
-const fetchWordInfoByDate = (date: Date): WordInfo | null => {
-    let wordInfo: WordInfo | null = null;
+const fetchWordInfoByDate = async (date: Date): Promise<WordToday> => {
     const formattedDateString = date.toISOString().split('T')[0];
-    fetch(`api/data/${formattedDateString}.json`)
-        .then(response => response.json())
-        .then(data => {
-            wordInfo = data as WordInfo;
-        })
-        .catch(() => {
-            throw new NotFoundError(
-                `No data available for ${formattedDateString}`
-            );
-        });
-    return wordInfo;
+    try {
+        const response = await fetch(`api/data/${formattedDateString}.json`);
+        const data = await response.json();
+        return data as WordToday;
+    } catch {
+        throw new NotFoundError(`No data available for ${formattedDateString}`);
+    }
 };
 
-let cachedWordInfo: WordInfo | null = null;
+let cachedWordInfo: WordToday | null = null;
 
 /**
  * @throws NotFoundError if no data available for today.
  * @see fetchWordInfoByDate
  */
-export const getToday = (): WordInfo | null => {
+export const getToday = async (): Promise<WordToday> => {
     if (cachedWordInfo !== null) return cachedWordInfo;
-    const today = fetchWordInfoByDate(new Date());
+    const today = await fetchWordInfoByDate(new Date());
     cachedWordInfo = today;
     return today;
-};
-
-/**
- * @throws NotFoundError if no data available for the given date
- * @throws Error if no clue available for the given attempt
- *
- * @param attempt
- */
-export const getClue = (attempt: number): string => {
-    const wordInfo = getToday();
-    if (!wordInfo) throw new NotFoundError('No data available for today');
-    const clue = wordInfo.clues[attempt];
-    if (!clue) throw new Error(`No clue available for attempt ${attempt}`);
-    return clue;
-};
-
-export const isGuessCorrect = (guessedWord: string): boolean => {
-    const wordInfo = getToday();
-    if (!wordInfo) return false; // No word data available, so no correct answer
-    const correctWord = wordInfo.word;
-    return guessedWord.toLowerCase() === correctWord.toLowerCase();
 };

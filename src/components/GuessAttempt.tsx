@@ -1,17 +1,14 @@
 import React from 'react';
 import BlankWordInput from './BlankWordInput.tsx';
-import { isGuessCorrect } from '../lib/game.ts';
 
 interface GuessAttemptProps {
-    onCorrect: () => void;
-    onIncorrect: () => void;
     showInput: boolean;
+    onSubmit: (guess: string) => void;
 }
 
 export default function GuessAttempt({
     showInput,
-    onCorrect,
-    onIncorrect,
+    onSubmit,
 }: GuessAttemptProps) {
     const [guess, setGuess] = React.useState<string>('');
 
@@ -24,11 +21,12 @@ export default function GuessAttempt({
         if (!isOnlyLetters(keyValue)) event.preventDefault();
     };
 
-    const onSubmit = () => {
+    const handleSubmitPressed = () => {
         if (isDisabled) return;
-        isGuessCorrect(guess) ? onCorrect() : onIncorrect();
         setIsDisabled(true);
+        onSubmit(guess);
     };
+
     return showInput ? (
         <div className="flex h-14 w-full flex-row gap-2">
             <input
@@ -41,7 +39,7 @@ export default function GuessAttempt({
             ></input>
             {!isDisabled && (
                 <button
-                    onClick={onSubmit}
+                    onClick={handleSubmitPressed}
                     className="h-full rounded-lg bg-slate-800 px-4 py-2 font-semibold text-white transition-colors hover:bg-slate-600 "
                 >
                     Submit
