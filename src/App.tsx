@@ -37,6 +37,7 @@ function App() {
             })
             .catch(() => {
                 setIsError(true);
+                setIsLoading(false);
             });
     };
 
@@ -53,7 +54,9 @@ function App() {
                         <StartScreen onStart={startGame} />
                     )}
                     {isLoading && <LoadingScreen />}
-                    {isError && <div>There was an error loading the game.</div>}
+                    {isError && !isLoading && (
+                        <div>There was an error loading the game.</div>
+                    )}
                 </main>
 
                 <div className="justify-self-end">

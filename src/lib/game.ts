@@ -1,9 +1,10 @@
 export type WordToday = {
     word: string;
     clues: Record<number, string>;
+    date: string;
 };
 
-export class NotFoundError extends Error {
+class NotFoundError extends Error {
     constructor(message: string) {
         super(message);
         this.name = 'NotFoundError';
@@ -15,7 +16,7 @@ export class NotFoundError extends Error {
  * @param date
  */
 const fetchWordInfoByDate = async (date: Date): Promise<WordToday> => {
-    const formattedDateString = date.toISOString().split('T')[0];
+    const formattedDateString = date.toLocaleString('en-CA').split(', ')[0];
     try {
         const response = await fetch(`api/data/${formattedDateString}.json`);
         const data = await response.json();

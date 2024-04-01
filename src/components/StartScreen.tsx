@@ -8,6 +8,12 @@ interface StartScreenProps {
 }
 
 export default function StartScreen({ onStart }: StartScreenProps) {
+    const todaysDate = new Date().toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+    });
+
     return (
         <section className="flex h-full w-full items-center justify-center">
             <motion.div
@@ -38,7 +44,7 @@ export default function StartScreen({ onStart }: StartScreenProps) {
                 </motion.button>
                 {/* WordToday's date */}
                 <motion.div variants={item} className="font-medium">
-                    March 31, 2024
+                    {todaysDate}
                 </motion.div>
             </motion.div>
         </section>
