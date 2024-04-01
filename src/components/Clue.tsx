@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { item } from '../lib/animations.ts';
 
 interface ClueProps {
     attempt: number;
@@ -13,7 +15,10 @@ export default function Clue({ attempt, clueText }: ClueProps) {
     }, [attempt, clueText]);
 
     return (
-        <div className="w-full self-start bg-slate-900 p-4 shadow">
+        <motion.div
+            variants={item}
+            className="w-full self-start bg-slate-900 p-4 shadow"
+        >
             {error && <span className="font-bold text-red-400">{error}</span>}
             {!error && (
                 <div className="text-white">
@@ -21,6 +26,6 @@ export default function Clue({ attempt, clueText }: ClueProps) {
                     {clueText}.
                 </div>
             )}
-        </div>
+        </motion.div>
     );
 }

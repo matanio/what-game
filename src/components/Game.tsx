@@ -2,6 +2,8 @@ import { useState } from 'react';
 import GuessAttempt from './GuessAttempt.tsx';
 import Clue from './Clue.tsx';
 import { WordToday } from '../lib/game.ts';
+import { motion } from 'framer-motion';
+import { container, item } from '../lib/animations.ts';
 
 const TOTAL_ATTEMPTS: number = 5;
 
@@ -32,9 +34,16 @@ export default function Game({ word, clues }: WordToday) {
     };
 
     return (
-        <section className="grid h-full w-full place-items-center p-4">
+        <motion.section
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="grid h-full w-full place-items-center p-4"
+        >
             <div className="flex h-full w-full max-w-2xl flex-col items-center justify-start gap-4 py-4">
-                <div className="text-lg font-medium">Guess the word!</div>
+                <motion.div variants={item} className="text-lg font-medium">
+                    Guess the word!
+                </motion.div>
                 <Clue
                     attempt={currentAttempt}
                     clueText={clues[currentAttempt]}
@@ -47,6 +56,6 @@ export default function Game({ word, clues }: WordToday) {
                     />
                 ))}
             </div>
-        </section>
+        </motion.section>
     );
 }

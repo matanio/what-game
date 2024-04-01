@@ -1,4 +1,5 @@
 import { cn } from '../lib/util.ts';
+import { motion } from 'framer-motion';
 
 interface LogoProps {
     className?: string;
@@ -20,3 +21,5 @@ export default function Logo({ className }: LogoProps) {
         </svg>
     );
 }
+
+export const LogoMotion = motion(Logo);

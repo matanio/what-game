@@ -1,5 +1,7 @@
 import React from 'react';
 import BlankWordInput from './BlankWordInput.tsx';
+import { motion } from 'framer-motion';
+import { item } from '../lib/animations.ts';
 
 interface GuessAttemptProps {
     showInput: boolean;
@@ -28,7 +30,7 @@ export default function GuessAttempt({
     };
 
     return showInput ? (
-        <div className="flex h-14 w-full flex-row gap-2">
+        <motion.div variants={item} className="flex h-14 w-full flex-row gap-2">
             <input
                 disabled={isDisabled}
                 className="h-full w-full rounded-lg border-2 border-slate-800 px-4 py-2 text-center text-3xl font-bold uppercase tracking-[0.25em]  placeholder:font-medium placeholder:normal-case placeholder:tracking-wide placeholder:text-slate-300 focus:border-amber-500 focus:bg-slate-50 focus:outline-amber-500 disabled:text-slate-300"
@@ -45,7 +47,7 @@ export default function GuessAttempt({
                     Submit
                 </button>
             )}
-        </div>
+        </motion.div>
     ) : (
         <BlankWordInput />
     );
