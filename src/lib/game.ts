@@ -1,7 +1,6 @@
 export type WordToday = {
     word: string;
     clues: Record<number, string>;
-    date: string;
 };
 
 class NotFoundError extends Error {
