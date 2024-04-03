@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import GuessAttempt from './GuessAttempt.tsx';
 import Clue from './Clue.tsx';
 import { TOTAL_ATTEMPTS, WordToday } from '../lib/game.ts';
@@ -12,13 +12,20 @@ export default function Game({ word, clues }: WordToday) {
     const [currentAttempt, setCurrentAttempt] = useState<number>(1);
     const { isOpen: isInstructionsOpen, closeModal: closeInstructions } =
         useModal(true);
+    const [wasSolved, setWasSolved] = useState<boolean>(false);
+
     const {
         isOpen: isResultsOpen,
         closeModal: closeResults,
         openModal: openResults,
     } = useModal(false);
 
-    const [wasSolved, setWasSolved] = useState<boolean>(false);
+    const guessAttemptRef = useRef<HTMLInputElement>(null);
+
+    const handleCloseInstructions = () => {
+        closeInstructions();
+        guessAttemptRef.current?.focus();
+    };
     const gameOver = (wasGameSuccess: boolean) => {
         setWasSolved(wasGameSuccess);
         openResults();
@@ -49,7 +56,7 @@ export default function Game({ word, clues }: WordToday) {
             <InstructionsModal
                 totalNumberOfAttempts={TOTAL_ATTEMPTS}
                 showModal={isInstructionsOpen}
-                onClose={closeInstructions}
+                onClose={handleCloseInstructions}
             />
             <ResultsModal
                 showModal={isResultsOpen}
@@ -72,6 +79,7 @@ export default function Game({ word, clues }: WordToday) {
                 />
                 {[...Array(TOTAL_ATTEMPTS)].map((_, index) => (
                     <GuessAttempt
+                        ref={guessAttemptRef}
                         key={index}
                         showInput={index <= currentAttempt - 1}
                         onSubmit={checkGuess}
