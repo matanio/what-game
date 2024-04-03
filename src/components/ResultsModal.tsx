@@ -2,7 +2,11 @@ import { ModalProps } from '../lib/util.ts';
 import CloseButton from './CloseButton.tsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { GameResult, TOTAL_ATTEMPTS } from '../lib/game.ts';
+import {
+    GameResult,
+    generateScoreGridText,
+    TOTAL_ATTEMPTS,
+} from '../lib/game.ts';
 import { ScoreGrid } from './ScoreGrid.tsx';
 
 export default function ResultsModal({
@@ -12,28 +16,27 @@ export default function ResultsModal({
     onClose,
 }: GameResult & ModalProps) {
     const [message, setMessage] = useState<string>('');
+    const [shareButtonText, setShareButtonText] =
+        useState<string>('Share Results');
 
     useEffect(() => {
         setMessage(wasSolved ? 'Nice one!' : 'Better luck next time!');
     }, [wasSolved]);
 
     const copyResultsToClipboard = () => {
-        let scoreGridInText: string = '';
-        const iterations = wasSolved ? numberOfAttempts : TOTAL_ATTEMPTS + 1;
-        for (let i = 0; i < iterations; i++) {
-            if (i === iterations - 1) {
-                scoreGridInText += wasSolved ? '\n🟩🟩🟩🟩' : '\n💩💩💩💩';
-            } else {
-                scoreGridInText += '\n⬜️⬜️⬜️⬜';
-            }
-        }
-        const results =
-            '' +
-            `What #1 ${wasSolved ? numberOfAttempts : 'X'}/${TOTAL_ATTEMPTS}` +
-            `${scoreGridInText}`;
-        navigator.clipboard
-            .writeText(results)
-            .then(r => console.log('copied', r));
+        const scoreGridInText: string = generateScoreGridText(
+            wasSolved,
+            numberOfAttempts
+        );
+
+        const results = `What #1 ${wasSolved ? numberOfAttempts : 'X'}/${TOTAL_ATTEMPTS}${scoreGridInText}`;
+
+        navigator.clipboard.writeText(results).then(() => {
+            setShareButtonText('Copied!');
+            setTimeout(() => {
+                setShareButtonText('Share Results');
+            }, 2000);
+        });
     };
     return (
         <AnimatePresence>
@@ -77,7 +80,7 @@ export default function ResultsModal({
                             className="rounded-lg bg-slate-800 px-4 py-2 font-semibold text-white transition-colors hover:bg-slate-600"
                             onClick={copyResultsToClipboard}
                         >
-                            Share Results
+                            {shareButtonText}
                         </button>
                     </motion.div>
                 </motion.div>

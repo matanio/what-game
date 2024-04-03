@@ -44,3 +44,19 @@ export const getToday = async (): Promise<WordToday> => {
     cachedWordInfo = today;
     return today;
 };
+
+export const generateScoreGridText = (
+    wasSolved: boolean,
+    numberOfAttempts: number
+): string => {
+    let scoreGridInText: string = '';
+    const iterations = wasSolved ? numberOfAttempts : TOTAL_ATTEMPTS + 1;
+    for (let i = 0; i < iterations; i++) {
+        if (i === iterations - 1) {
+            scoreGridInText += wasSolved ? '\n🟩🟩🟩🟩' : '\n💩💩💩💩';
+        } else {
+            scoreGridInText += '\n⬜️⬜️⬜️⬜';
+        }
+    }
+    return scoreGridInText;
+};
