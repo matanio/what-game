@@ -18,13 +18,20 @@ export default function GuessAttempt({
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (isDisabled) return;
-
         const keyValue = event.key;
+        if (keyValue === 'Enter') {
+            handleSubmitPressed();
+            return;
+        }
         if (!isOnlyLetters(keyValue)) event.preventDefault();
     };
 
+    const isGuessValid = () => {
+        return guess.length > 0 && isOnlyLetters(guess);
+    };
     const handleSubmitPressed = () => {
         if (isDisabled) return;
+        if (!isGuessValid()) return;
         setIsDisabled(true);
         onSubmit(guess);
     };
@@ -32,6 +39,7 @@ export default function GuessAttempt({
     return showInput ? (
         <motion.div variants={item} className="flex h-14 w-full flex-row gap-2">
             <input
+                autoFocus={true}
                 disabled={isDisabled}
                 className="h-full w-full rounded-lg border-2 border-slate-800 px-4 py-2 text-center text-3xl font-bold uppercase tracking-[0.25em]  placeholder:font-medium placeholder:normal-case placeholder:tracking-wide placeholder:text-slate-300 focus:border-amber-500 focus:bg-slate-50 focus:outline-amber-500 disabled:text-slate-300"
                 type="text"

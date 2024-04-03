@@ -25,3 +25,21 @@ export function useLocalStorage<T>(
 
     return [value, setValue];
 }
+
+export default function useModal(initialOpenState: boolean = true) {
+    const [isOpen, setIsOpen] = useState<boolean>(initialOpenState);
+    const closeModal = () => {
+        setIsOpen(false);
+    };
+
+    const openModal = () => {
+        setIsOpen(true);
+    };
+
+    return { isOpen, closeModal, openModal };
+}
+
+export interface ModalProps {
+    showModal: boolean;
+    onClose: () => void;
+}

@@ -1,3 +1,5 @@
+export const TOTAL_ATTEMPTS: number = 6;
+
 export type WordToday = {
     word: string;
     clues: Record<number, string>;
@@ -8,6 +10,11 @@ class NotFoundError extends Error {
         super(message);
         this.name = 'NotFoundError';
     }
+}
+
+export interface GameResult {
+    wasSolved: boolean;
+    numberOfAttempts: number;
 }
 
 /**
