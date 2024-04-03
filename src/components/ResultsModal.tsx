@@ -14,7 +14,7 @@ export default function ResultsModal({
     const [message, setMessage] = useState<string>('');
 
     useEffect(() => {
-        setMessage(!wasSolved ? 'Nice one!' : 'Better luck next time!');
+        setMessage(wasSolved ? 'Nice one!' : 'Better luck next time!');
     }, [wasSolved]);
 
     const copyResultsToClipboard = () => {
