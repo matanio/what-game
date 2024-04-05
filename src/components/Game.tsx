@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import GuessAttempt from './GuessAttempt.tsx';
 import Clue from './Clue.tsx';
-import { TOTAL_ATTEMPTS, WordToday } from '../lib/game.ts';
+import { isWordsEqual, TOTAL_ATTEMPTS, WordToday } from '../lib/game.ts';
 import { motion } from 'framer-motion';
 import { container, item } from '../lib/animations.ts';
 import InstructionsModal from './InstructionsModal.tsx';
@@ -43,7 +43,7 @@ export default function Game({ word, clues }: WordToday) {
     };
 
     const checkGuess = (guess: string) => {
-        const isCorrect = guess.toLowerCase() === word.toLowerCase();
+        const isCorrect = isWordsEqual(guess, word);
         if (isCorrect) {
             handleCorrectGuess();
         } else {
@@ -82,6 +82,7 @@ export default function Game({ word, clues }: WordToday) {
                         ref={guessAttemptRef}
                         key={index}
                         showInput={index <= currentAttempt - 1}
+                        word={word}
                         onSubmit={checkGuess}
                     />
                 ))}

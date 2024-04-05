@@ -60,3 +60,7 @@ export const generateScoreGridText = (
     }
     return scoreGridInText;
 };
+
+export const isWordsEqual = (wordOne: string, wordTwo: string): boolean => {
+    return wordOne.toLowerCase() === wordTwo.toLowerCase();
+};
