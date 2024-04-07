@@ -1,6 +1,7 @@
 import { ModalProps } from '../lib/util.ts';
 import CloseButton from './CloseButton.tsx';
 import { AnimatePresence, motion } from 'framer-motion';
+import React from 'react';
 
 interface InstructionsModalProps {
     totalNumberOfAttempts: number;
@@ -11,6 +12,14 @@ export default function InstructionsModal({
     showModal,
     onClose,
 }: InstructionsModalProps & ModalProps) {
+    const handleOuterClick = (
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ) => {
+        if (event.target === event.currentTarget) {
+            onClose();
+        }
+    };
+
     return (
         <AnimatePresence>
             {showModal && (
@@ -18,6 +27,7 @@ export default function InstructionsModal({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
+                    onClick={handleOuterClick}
                     className="absolute z-50 flex h-full w-full items-start justify-center bg-white bg-opacity-90"
                 >
                     <motion.div

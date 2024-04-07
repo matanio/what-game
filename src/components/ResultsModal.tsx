@@ -1,7 +1,7 @@
 import { ModalProps } from '../lib/util.ts';
 import CloseButton from './CloseButton.tsx';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     GameResult,
     generateScoreGridText,
@@ -39,6 +39,15 @@ export default function ResultsModal({
             }, 2000);
         });
     };
+
+    const handleOuterClick = (
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ) => {
+        if (event.target === event.currentTarget) {
+            onClose();
+        }
+    };
+
     return (
         <AnimatePresence>
             {showModal && (
@@ -47,6 +56,7 @@ export default function ResultsModal({
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
                     exit={{ opacity: 0 }}
+                    onClick={handleOuterClick}
                     className="absolute z-50 flex h-full w-full items-start justify-center bg-white bg-opacity-90"
                 >
                     <motion.div
