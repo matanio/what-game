@@ -1,8 +1,13 @@
+import { formatDateAsYearMonthDay } from './util.ts';
+import { GameContext } from '../contexts/GameContextProvider.tsx';
+import { useContext } from 'react';
+
 export const TOTAL_ATTEMPTS: number = 6;
 
 export type WordToday = {
     word: string;
     clues: Record<number, string>;
+    date: string; // YYYY-MM-DD
 };
 
 export class NotFoundError extends Error {
@@ -22,7 +27,7 @@ export interface GameResult {
  * @param date
  */
 const fetchWordInfoByDate = async (date: Date): Promise<WordToday> => {
-    const formattedDateString = date.toLocaleString('en-CA').split(', ')[0];
+    const formattedDateString = formatDateAsYearMonthDay(date);
     try {
         const response = await fetch(`api/data/${formattedDateString}.json`);
         const data = await response.json();
@@ -65,8 +70,19 @@ export const isWordsEqual = (wordOne: string, wordTwo: string): boolean => {
     return wordOne.toLowerCase() === wordTwo.toLowerCase();
 };
 
-export const todaysDate = new Date().toLocaleDateString('en-US', {
+export const todayFancyDateString = new Date().toLocaleDateString('en-US', {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
 });
+
+export const useGameState = () => {
+    const context = useContext(GameContext);
+
+    if (!context)
+        throw new Error(
+            'useGameState must be used inside the GameContextProvider'
+        );
+
+    return context;
+};

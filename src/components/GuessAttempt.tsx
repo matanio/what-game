@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import BlankWordInput from './BlankWordInput.tsx';
 import { motion } from 'framer-motion';
 import { item } from '../lib/animations.ts';
@@ -11,18 +11,36 @@ interface GuessAttemptProps {
     onIncorrect: (guess: string) => void;
     word: string;
     guesses: string[];
+    initialGuess: string;
 }
 
 const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
     (
-        { showInput, onCorrect, onIncorrect, word, guesses }: GuessAttemptProps,
+        {
+            showInput,
+            onCorrect,
+            onIncorrect,
+            word,
+            guesses,
+            initialGuess,
+        }: GuessAttemptProps,
         ref
     ) => {
-        const [guess, setGuess] = React.useState<string>('');
+        const [guess, setGuess] = React.useState<string>(initialGuess);
 
         const [isDisabled, setIsDisabled] = React.useState<boolean>(false);
 
         const [color, setColor] = React.useState<string>();
+
+        useEffect(() => {
+            if (initialGuess !== '') {
+                // Check if the guess is correct
+                const isCorrect = isWordsEqual(guess, word);
+                // Disable the input and color the guess appropriately
+                setIsDisabled(true);
+                colorGuess(isCorrect);
+            }
+        }, [guess, initialGuess, word]);
 
         const handleKeyPress = (
             event: React.KeyboardEvent<HTMLInputElement>
@@ -65,15 +83,14 @@ const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
 
             // Check if the guess is correct
             const isCorrect = isWordsEqual(guess, word);
+            // Disable the input and color the guess appropriately
+            setIsDisabled(true);
+            colorGuess(isCorrect);
             if (isCorrect) {
                 onCorrect(guess);
             } else {
                 onIncorrect(guess);
             }
-
-            // Disable the input and color the guess appropriately
-            setIsDisabled(true);
-            colorGuess(isCorrect);
         };
 
         return showInput ? (
@@ -89,6 +106,7 @@ const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
                         'h-full w-full rounded-lg border-2 border-slate-800 px-4 py-2 text-center text-3xl font-bold uppercase tracking-[0.25em]  placeholder:font-medium placeholder:normal-case placeholder:tracking-wide placeholder:text-slate-300 focus:border-amber-500 focus:bg-slate-50 focus:outline-amber-500 disabled:text-slate-300',
                         color
                     )}
+                    value={guess}
                     type="text"
                     placeholder="Start typing..."
                     onKeyDown={handleKeyPress}

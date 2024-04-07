@@ -26,6 +26,10 @@ export function useLocalStorage<T>(
     return [value, setValue];
 }
 
+export function clearLocalStorage(key: string) {
+    window.localStorage.removeItem(key);
+}
+
 export default function useModal(initialOpenState: boolean = true) {
     const [isOpen, setIsOpen] = useState<boolean>(initialOpenState);
     const closeModal = () => {
@@ -47,3 +51,11 @@ export interface ModalProps {
 export interface IconProps {
     className?: string;
 }
+
+/**
+ * Formats a date as a string in the format "YYYY-MM-DD".
+ * @param date
+ */
+export const formatDateAsYearMonthDay = (date: Date): string => {
+    return date.toLocaleString('en-CA').split(', ')[0];
+};

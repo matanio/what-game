@@ -2,7 +2,7 @@ import { LogoMotion } from './Logo.tsx';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { container, item } from '../lib/animations.ts';
-import { todaysDate } from '../lib/game.ts';
+import { todayFancyDateString } from '../lib/game.ts';
 
 interface StartScreenProps {
     onStart: React.MouseEventHandler<HTMLButtonElement>;
@@ -39,7 +39,7 @@ export default function StartScreen({ onStart }: StartScreenProps) {
                 </motion.button>
                 {/* WordToday's date */}
                 <motion.div variants={item} className="font-medium">
-                    {todaysDate}
+                    {todayFancyDateString}
                 </motion.div>
             </motion.div>
         </section>
