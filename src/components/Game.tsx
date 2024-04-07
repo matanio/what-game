@@ -27,6 +27,8 @@ export default function Game({ word, clues }: WordToday) {
     const [isGameCompletedToday, setIsGameCompletedToday] =
         useState<boolean>(false);
 
+    const [guesses, setGuesses] = useState<string[]>([]);
+
     const {
         isOpen: isResultsOpen,
         closeModal: closeResults,
@@ -56,7 +58,12 @@ export default function Game({ word, clues }: WordToday) {
         setCurrentAttempt(currentAttempt + 1);
     };
 
+    const addToGuesses = (guess: string) => {
+        setGuesses([...guesses, guess]);
+    };
+
     const checkGuess = (guess: string) => {
+        addToGuesses(guess.toLowerCase());
         const isCorrect = isWordsEqual(guess, word);
         if (isCorrect) {
             handleCorrectGuess();
@@ -103,6 +110,7 @@ export default function Game({ word, clues }: WordToday) {
                 />
                 {[...Array(TOTAL_ATTEMPTS)].map((_, index) => (
                     <GuessAttempt
+                        guesses={guesses}
                         ref={guessAttemptRef}
                         key={index}
                         showInput={index <= currentAttempt - 1}

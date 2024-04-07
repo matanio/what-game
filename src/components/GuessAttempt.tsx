@@ -9,10 +9,11 @@ interface GuessAttemptProps {
     showInput: boolean;
     onSubmit: (guess: string) => void;
     word: string;
+    guesses: string[];
 }
 
 const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
-    ({ showInput, onSubmit, word }: GuessAttemptProps, ref) => {
+    ({ showInput, onSubmit, word, guesses }: GuessAttemptProps, ref) => {
         const [guess, setGuess] = React.useState<string>('');
 
         const [isDisabled, setIsDisabled] = React.useState<boolean>(false);
@@ -44,6 +45,10 @@ const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
         };
 
         const handleSubmitPressed = () => {
+            if (guesses.includes(guess.toLowerCase())) {
+                console.log('show toast');
+                return;
+            }
             if (isDisabled) return;
             if (!isGuessValid()) return;
             setIsDisabled(true);
