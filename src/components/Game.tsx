@@ -1,12 +1,7 @@
 import { useRef, useState } from 'react';
 import GuessAttempt from './GuessAttempt.tsx';
 import Clue from './Clue.tsx';
-import {
-    isWordsEqual,
-    todaysDate,
-    TOTAL_ATTEMPTS,
-    WordToday,
-} from '../lib/game.ts';
+import { todaysDate, TOTAL_ATTEMPTS, WordToday } from '../lib/game.ts';
 import { motion } from 'framer-motion';
 import { container, item } from '../lib/animations.ts';
 import InstructionsModal from './InstructionsModal.tsx';
@@ -26,9 +21,11 @@ export default function Game({ word, clues }: WordToday) {
 
     const [isGameCompletedToday, setIsGameCompletedToday] =
         useState<boolean>(false);
-
     const [guesses, setGuesses] = useState<string[]>([]);
 
+    const addToGuesses = (guess: string) => {
+        setGuesses([...guesses, guess]);
+    };
     const {
         isOpen: isResultsOpen,
         closeModal: closeResults,
@@ -46,30 +43,18 @@ export default function Game({ word, clues }: WordToday) {
         setIsGameCompletedToday(true);
         openResults();
     };
-    const handleCorrectGuess = () => {
+    const handleCorrectGuess = (guess: string) => {
+        addToGuesses(guess);
         gameOver(true);
     };
 
-    const handleIncorrectGuess = () => {
+    const handleIncorrectGuess = (guess: string) => {
+        addToGuesses(guess);
         if (currentAttempt === TOTAL_ATTEMPTS) {
             gameOver(false);
             return;
         }
         setCurrentAttempt(currentAttempt + 1);
-    };
-
-    const addToGuesses = (guess: string) => {
-        setGuesses([...guesses, guess]);
-    };
-
-    const checkGuess = (guess: string) => {
-        addToGuesses(guess.toLowerCase());
-        const isCorrect = isWordsEqual(guess, word);
-        if (isCorrect) {
-            handleCorrectGuess();
-        } else {
-            handleIncorrectGuess();
-        }
     };
 
     return (
@@ -115,7 +100,8 @@ export default function Game({ word, clues }: WordToday) {
                         key={index}
                         showInput={index <= currentAttempt - 1}
                         word={word}
-                        onSubmit={checkGuess}
+                        onCorrect={handleCorrectGuess}
+                        onIncorrect={handleIncorrectGuess}
                     />
                 ))}
             </motion.div>

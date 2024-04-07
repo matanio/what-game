@@ -7,13 +7,17 @@ import { isWordsEqual } from '../lib/game.ts';
 
 interface GuessAttemptProps {
     showInput: boolean;
-    onSubmit: (guess: string) => void;
+    onCorrect: (guess: string) => void;
+    onIncorrect: (guess: string) => void;
     word: string;
     guesses: string[];
 }
 
 const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
-    ({ showInput, onSubmit, word, guesses }: GuessAttemptProps, ref) => {
+    (
+        { showInput, onCorrect, onIncorrect, word, guesses }: GuessAttemptProps,
+        ref
+    ) => {
         const [guess, setGuess] = React.useState<string>('');
 
         const [isDisabled, setIsDisabled] = React.useState<boolean>(false);
@@ -36,24 +40,40 @@ const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
             return guess.length > 0 && isOnlyLetters(guess);
         };
 
-        const colorGuess = () => {
-            const correctStateClasses =
-                'disabled:text-green-800 disabled:border-green-800 disabled:bg-green-400';
-            if (isWordsEqual(guess, word)) {
-                setColor(correctStateClasses);
+        const colorGuess = (isCorrect: boolean) => {
+            if (isCorrect) {
+                setColor(
+                    'disabled:text-green-800 disabled:border-green-800 disabled:bg-green-400'
+                );
             }
         };
 
+        const alreadyGuessed = (guess: string) => {
+            return guesses.includes(guess.toLowerCase());
+        };
+
         const handleSubmitPressed = () => {
-            if (guesses.includes(guess.toLowerCase())) {
+            // Don't do anything if the input is disabled or the guess is invalid
+            if (isDisabled) return;
+            if (!isGuessValid()) return;
+
+            // Check if the guess has already been made
+            if (alreadyGuessed(guess)) {
                 console.log('show toast');
                 return;
             }
-            if (isDisabled) return;
-            if (!isGuessValid()) return;
+
+            // Check if the guess is correct
+            const isCorrect = isWordsEqual(guess, word);
+            if (isCorrect) {
+                onCorrect(guess);
+            } else {
+                onIncorrect(guess);
+            }
+
+            // Disable the input and color the guess appropriately
             setIsDisabled(true);
-            colorGuess();
-            onSubmit(guess);
+            colorGuess(isCorrect);
         };
 
         return showInput ? (
