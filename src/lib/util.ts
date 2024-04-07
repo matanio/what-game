@@ -43,3 +43,7 @@ export interface ModalProps {
     showModal: boolean;
     onClose: () => void;
 }
+
+export interface IconProps {
+    className?: string;
+}

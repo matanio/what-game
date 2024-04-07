@@ -2,18 +2,13 @@ import { LogoMotion } from './Logo.tsx';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { container, item } from '../lib/animations.ts';
+import { todaysDate } from '../lib/game.ts';
 
 interface StartScreenProps {
     onStart: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export default function StartScreen({ onStart }: StartScreenProps) {
-    const todaysDate = new Date().toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-    });
-
     return (
         <section className="flex h-full w-full items-center justify-center">
             <motion.div

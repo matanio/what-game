@@ -1,13 +1,9 @@
-import { cn } from '../lib/util.ts';
+import { cn, IconProps } from '../lib/util.ts';
 import { motion } from 'framer-motion';
 import { forwardRef } from 'react';
 
-interface LogoProps {
-    className?: string;
-}
-
-const Logo = forwardRef<SVGSVGElement, LogoProps>(
-    ({ className }: LogoProps, ref) => {
+const Logo = forwardRef<SVGSVGElement, IconProps>(
+    ({ className }: IconProps, ref) => {
         return (
             <svg
                 ref={ref}
