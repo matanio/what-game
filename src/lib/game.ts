@@ -5,7 +5,7 @@ export type WordToday = {
     clues: Record<number, string>;
 };
 
-class NotFoundError extends Error {
+export class NotFoundError extends Error {
     constructor(message: string) {
         super(message);
         this.name = 'NotFoundError';

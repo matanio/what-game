@@ -5,12 +5,13 @@ import Game from './components/Game.tsx';
 import { useEffect, useState } from 'react';
 import LoadingScreen from './components/LoadingScreen.tsx';
 import { getToday } from './lib/game.ts';
+import ErrorScreen from './components/ErrorScreen.tsx';
 
 function App() {
     // States
     const [showGame, setShowGame] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [isError, setIsError] = useState<boolean>(false);
+    const [error, setError] = useState<Error | null>(null);
 
     // Data
     const [word, setWord] = useState<string>('');
@@ -35,8 +36,8 @@ function App() {
                 setClues(today.clues);
                 setIsLoading(false);
             })
-            .catch(() => {
-                setIsError(true);
+            .catch(e => {
+                setError(e);
                 setIsLoading(false);
             });
     };
@@ -47,16 +48,14 @@ function App() {
                 <Header />
                 {/* Main Space */}
                 <main className="grow">
-                    {showGame && !isLoading && !isError && (
+                    {showGame && !isLoading && !error && (
                         <Game word={word} clues={clues} />
                     )}
-                    {!showGame && !isLoading && !isError && (
+                    {!showGame && !isLoading && !error && (
                         <StartScreen onStart={startGame} />
                     )}
                     {isLoading && <LoadingScreen />}
-                    {isError && !isLoading && (
-                        <div>There was an error loading the game.</div>
-                    )}
+                    {error && !isLoading && <ErrorScreen error={error} />}
                 </main>
 
                 <div className="justify-self-end">
