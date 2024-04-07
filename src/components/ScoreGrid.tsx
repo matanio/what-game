@@ -17,7 +17,7 @@ export function ScoreGrid({ wasSolved, numberOfAttempts }: GameResult) {
             return (
                 <div
                     key={index}
-                    className="h-16 w-full rounded-xl bg-slate-200"
+                    className="h-12 w-3/4 rounded-xl bg-slate-200"
                 ></div>
             );
         });
@@ -27,14 +27,14 @@ export function ScoreGrid({ wasSolved, numberOfAttempts }: GameResult) {
                 return (
                     <div
                         key={index}
-                        className="h-16 w-full rounded-xl bg-green-500"
+                        className="h-12 w-3/4 rounded-xl bg-green-500"
                     ></div>
                 );
             }
             return (
                 <div
                     key={index}
-                    className="h-16 w-full rounded-xl bg-slate-200"
+                    className="h-12 w-3/4 rounded-xl bg-slate-200"
                 ></div>
             );
         });
