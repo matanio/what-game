@@ -8,6 +8,7 @@ import {
     TOTAL_ATTEMPTS,
 } from '../lib/game.ts';
 import { ScoreGrid } from './ScoreGrid.tsx';
+import CountdownTimer from './CountdownTimer.tsx';
 
 export default function ResultsModal({
     wasSolved,
@@ -82,6 +83,12 @@ export default function ResultsModal({
                         >
                             {shareButtonText}
                         </button>
+                        <hr />
+
+                        <div className="flex flex-col items-center justify-center ">
+                            <div className="font-semibold">NEXT WORD IN</div>
+                            <CountdownTimer />
+                        </div>
                     </motion.div>
                 </motion.div>
             )}
