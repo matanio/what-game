@@ -78,6 +78,7 @@ export default function Game() {
                 onClose={closeResults}
                 wasSolved={gameResult?.wasSolved ?? false}
                 numberOfAttempts={currentAttempt}
+                word={wordToday!.word}
             />
             <motion.div
                 variants={container}

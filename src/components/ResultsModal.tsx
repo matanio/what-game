@@ -10,18 +10,23 @@ import {
 import { ScoreGrid } from './ScoreGrid.tsx';
 import CountdownTimer from './CountdownTimer.tsx';
 
+interface ResultsModalProps extends GameResult, ModalProps {
+    word: string;
+}
+
 export default function ResultsModal({
     wasSolved,
     numberOfAttempts,
     showModal,
     onClose,
-}: GameResult & ModalProps) {
+    word,
+}: ResultsModalProps) {
     const [message, setMessage] = useState<string>('');
     const [shareButtonText, setShareButtonText] =
         useState<string>('Share Results');
 
     useEffect(() => {
-        setMessage(wasSolved ? 'Nice one!' : 'Better luck next time!');
+        setMessage(wasSolved ? 'Nice one! 🎉' : 'Better luck next time!');
     }, [wasSolved]);
 
     const copyResultsToClipboard = () => {
@@ -79,6 +84,9 @@ export default function ResultsModal({
                             </span>
                         </div>
                         <h3 className="text-xl font-light">What #103</h3>
+                        <p className="font-extrabold uppercase">
+                            <span>"{word}"</span>
+                        </p>
                         <p>
                             {numberOfAttempts}/{TOTAL_ATTEMPTS}
                         </p>
