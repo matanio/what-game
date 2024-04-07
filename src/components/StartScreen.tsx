@@ -2,13 +2,16 @@ import { LogoMotion } from './Logo.tsx';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { container, item } from '../lib/animations.ts';
-import { todayFancyDateString } from '../lib/game.ts';
+import { formatDateAsMonthDayYear } from '../lib/util.ts';
+import { useGameState } from '../lib/game.ts';
 
 interface StartScreenProps {
     onStart: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export default function StartScreen({ onStart }: StartScreenProps) {
+    const { wordToday } = useGameState();
+
     return (
         <section className="flex h-full w-full items-center justify-center">
             <motion.div
@@ -39,7 +42,7 @@ export default function StartScreen({ onStart }: StartScreenProps) {
                 </motion.button>
                 {/* WordToday's date */}
                 <motion.div variants={item} className="font-medium">
-                    {todayFancyDateString}
+                    {formatDateAsMonthDayYear(new Date(wordToday!.date))}
                 </motion.div>
             </motion.div>
         </section>

@@ -1,15 +1,11 @@
 import { useRef } from 'react';
 import GuessAttempt from './GuessAttempt.tsx';
 import Clue from './Clue.tsx';
-import {
-    todayFancyDateString,
-    TOTAL_ATTEMPTS,
-    useGameState,
-} from '../lib/game.ts';
+import { TOTAL_ATTEMPTS, useGameState } from '../lib/game.ts';
 import { motion } from 'framer-motion';
 import { container, item } from '../lib/animations.ts';
 import InstructionsModal from './InstructionsModal.tsx';
-import useModal from '../lib/util.ts';
+import useModal, { formatDateAsMonthDayYear } from '../lib/util.ts';
 import ResultsModal from './ResultsModal.tsx';
 import { ScoreButton } from './ScoreButton.tsx';
 import HelpButton from './HelpButton.tsx';
@@ -90,7 +86,9 @@ export default function Game() {
                     variants={item}
                     className="grid w-full grid-cols-3 items-center justify-between"
                 >
-                    <div className="font-semibold">{todayFancyDateString}</div>
+                    <div className="font-semibold">
+                        {formatDateAsMonthDayYear(new Date(wordToday!.date))}
+                    </div>
                     <div className="justify-self-center">Guess the word!</div>
                     <div className="flex flex-row items-center justify-between gap-2 justify-self-end">
                         {gameResult && <ScoreButton onClick={openResults} />}

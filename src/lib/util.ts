@@ -53,9 +53,21 @@ export interface IconProps {
 }
 
 /**
- * Formats a date as a string in the format "YYYY-MM-DD".
+ * Formats a date as a string in the format "YYYY-MM-DD". e,g. "2022-01-01".
  * @param date
  */
 export const formatDateAsYearMonthDay = (date: Date): string => {
     return date.toLocaleString('en-CA').split(', ')[0];
+};
+
+/**
+ * Formats a date as a string in the format "Month Day, Year". e.g. "January 1, 2022".
+ * @param date
+ */
+export const formatDateAsMonthDayYear = (date: Date): string => {
+    return date.toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+    });
 };

@@ -70,12 +70,6 @@ export const isWordsEqual = (wordOne: string, wordTwo: string): boolean => {
     return wordOne.toLowerCase() === wordTwo.toLowerCase();
 };
 
-export const todayFancyDateString = new Date().toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-});
-
 export const useGameState = () => {
     const context = useContext(GameContext);
 
