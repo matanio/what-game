@@ -8,6 +8,7 @@ export type WordToday = {
     word: string;
     clues: Record<number, string>;
     date: string; // YYYY-MM-DD
+    author: string;
 };
 
 export class NotFoundError extends Error {

@@ -40,9 +40,14 @@ export default function StartScreen({ onStart }: StartScreenProps) {
                 >
                     Start
                 </motion.button>
-                {/* WordToday's date */}
-                <motion.div variants={item} className="font-medium">
-                    {formatDateAsMonthDayYear(new Date(wordToday!.date))}
+                <motion.div
+                    variants={item}
+                    className="flex flex-col items-center justify-center gap-1"
+                >
+                    <p className="font-medium">
+                        {formatDateAsMonthDayYear(new Date(wordToday!.date))}
+                    </p>
+                    <p className="text-sm">By {wordToday!.author}</p>
                 </motion.div>
             </motion.div>
         </section>

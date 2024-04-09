@@ -10,8 +10,7 @@ interface GuessAttemptProps {
     onCorrect: (guess: string) => void;
     onIncorrect: (guess: string) => void;
     word: string;
-    guesses: string[];
-    initialGuess: string;
+    initialGuessText: string;
 }
 
 const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
@@ -21,26 +20,25 @@ const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
             onCorrect,
             onIncorrect,
             word,
-            guesses,
-            initialGuess,
+            initialGuessText,
         }: GuessAttemptProps,
         ref
     ) => {
-        const [guess, setGuess] = React.useState<string>(initialGuess);
+        const [guess, setGuess] = React.useState<string>(initialGuessText);
 
         const [isDisabled, setIsDisabled] = React.useState<boolean>(false);
 
         const [color, setColor] = React.useState<string>();
 
         useEffect(() => {
-            if (initialGuess !== '') {
+            if (initialGuessText !== '') {
                 // Check if the guess is correct
                 const isCorrect = isWordsEqual(guess, word);
                 // Disable the input and color the guess appropriately
                 setIsDisabled(true);
                 colorGuess(isCorrect);
             }
-        }, [guess, initialGuess, word]);
+        }, [guess, initialGuessText, word]);
 
         const handleKeyPress = (
             event: React.KeyboardEvent<HTMLInputElement>
@@ -66,20 +64,10 @@ const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
             }
         };
 
-        const alreadyGuessed = (guess: string) => {
-            return guesses.includes(guess.toLowerCase());
-        };
-
         const handleSubmitPressed = () => {
             // Don't do anything if the input is disabled or the guess is invalid
             if (isDisabled) return;
             if (!isGuessValid()) return;
-
-            // Check if the guess has already been made
-            if (alreadyGuessed(guess)) {
-                console.log('show toast');
-                return;
-            }
 
             // Check if the guess is correct
             const isCorrect = isWordsEqual(guess, word);

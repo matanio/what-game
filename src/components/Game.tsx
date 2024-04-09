@@ -89,7 +89,9 @@ export default function Game() {
                     <div className="font-semibold">
                         {formatDateAsMonthDayYear(new Date(wordToday!.date))}
                     </div>
-                    <div className="justify-self-center">Guess the word!</div>
+                    <div className="justify-self-center text-center">
+                        Guess the word!
+                    </div>
                     <div className="flex flex-row items-center justify-between gap-2 justify-self-end">
                         {gameResult && <ScoreButton onClick={openResults} />}
                         <HelpButton onClick={openInstructions} />
@@ -101,14 +103,13 @@ export default function Game() {
                 />
                 {[...Array(TOTAL_ATTEMPTS)].map((_, index) => (
                     <GuessAttempt
-                        guesses={guesses}
                         ref={guessAttemptRef}
                         key={index}
                         showInput={index <= currentAttempt - 1}
                         word={wordToday!.word}
                         onCorrect={handleCorrectGuess}
                         onIncorrect={handleIncorrectGuess}
-                        initialGuess={guesses[index] ?? ''}
+                        initialGuessText={guesses[index] ?? ''}
                     />
                 ))}
             </motion.div>
