@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import GuessAttempt from './GuessAttempt.tsx';
-import Clue from './Clue.tsx';
+import Clues from './Clues.tsx';
 import { TOTAL_ATTEMPTS, useGameState } from '../lib/game.ts';
 import { motion } from 'framer-motion';
 import { container, item } from '../lib/animations.ts';
@@ -97,9 +97,11 @@ export default function Game() {
                         <HelpButton onClick={openInstructions} />
                     </div>
                 </motion.div>
-                <Clue
-                    attempt={currentAttempt}
-                    clueText={wordToday!.clues[currentAttempt]}
+                <Clues
+                    clues={Object.values(wordToday!.clues).slice(
+                        0,
+                        currentAttempt
+                    )}
                 />
                 {[...Array(TOTAL_ATTEMPTS)].map((_, index) => (
                     <GuessAttempt
