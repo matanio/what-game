@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { motion, PanInfo } from 'framer-motion';
+import { motion, PanInfo, useMotionValue } from 'framer-motion';
 import { cn } from '../lib/util.ts';
 import { item } from '../lib/animations.ts';
 
@@ -60,6 +60,7 @@ export default function Clues({ clues }: CluesProps) {
                             index={index}
                             onDragEnd={onDragEnd}
                             currentDisplayIndex={currentClueIndex}
+                            totalClueLength={clues.length}
                         />
                     );
                 })}
@@ -76,44 +77,147 @@ interface ClueProps {
     index: number;
     currentDisplayIndex: number;
     clue: string;
+    showArrow: boolean;
+    totalClueLength: number;
 }
 
-const Clue = ({ onDragEnd, index, clue, currentDisplayIndex }: ClueProps) => {
+const Clue = ({
+    onDragEnd,
+    index,
+    clue,
+    currentDisplayIndex,
+    totalClueLength,
+}: ClueProps) => {
     const isCurrent = currentDisplayIndex === index;
     const isPrevious = index < currentDisplayIndex;
     const isNext = index > currentDisplayIndex;
 
+    const dragX = useMotionValue(0);
+
+    const [isLeftArrowVisible, setLeftArrowVisible] = useState<boolean>(false);
+    const [isRightArrowVisible, setRightArrowVisible] =
+        useState<boolean>(false);
+
     const animateProps = isCurrent
         ? { x: 0, scale: 1, opacity: 1 }
         : {
-              x: isPrevious ? '-5%' : '5%',
+              x: isPrevious ? '8%' : '-8%',
               scale: 0.95,
-              opacity: 0.5,
+              opacity: 0.2,
           };
+
+    const handleDragStart = (
+        _e: MouseEvent | TouchEvent | PointerEvent,
+        { offset }: PanInfo
+    ) => {
+        if (offset.x > 0) {
+            setRightArrowVisible(false);
+            setLeftArrowVisible(true);
+        } else {
+            setLeftArrowVisible(false);
+            setRightArrowVisible(true);
+        }
+    };
+
+    const handleDragEnd = (
+        e: MouseEvent | TouchEvent | PointerEvent,
+        info: PanInfo
+    ) => {
+        setRightArrowVisible(false);
+        setLeftArrowVisible(false);
+        onDragEnd(e, info);
+    };
 
     return (
         <motion.div
             drag={isCurrent ? 'x' : undefined}
             dragConstraints={{ left: 0, right: 0 }}
-            onDragEnd={onDragEnd}
+            onDrag={(_e, { point }) => {
+                dragX.set(point.x);
+            }}
+            onDragEnd={handleDragEnd}
+            onDragStart={handleDragStart}
             initial={{
-                x: isPrevious ? '-5%' : '5%',
+                x: isPrevious ? '8%' : '-8%',
                 scale: 0.95,
                 opacity: 0,
             }}
             animate={animateProps}
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
             className={cn(
-                'col-start-1 col-end-1 row-start-1 row-end-1 w-full self-center overflow-x-hidden bg-slate-900 p-4 text-white shadow',
+                'col-start-1 col-end-1 row-start-1 row-end-1 flex w-full flex-row items-center gap-2 self-center overflow-x-hidden',
                 isCurrent
                     ? 'z-10 cursor-grab justify-self-center'
-                    : '-z-10 w-64 text-ellipsis opacity-50 shadow-xl',
+                    : '-z-10 w-64 text-ellipsis',
                 isPrevious && 'justify-self-start ',
                 isNext && 'justify-self-end text-ellipsis text-right'
             )}
         >
-            <span className={'font-bold'}>Clue #{index + 1}: </span>
-            {clue}.
+            {isCurrent && (
+                <motion.div
+                    animate={{
+                        opacity: isLeftArrowVisible && index > 0 ? 1 : 0,
+                        scale: isLeftArrowVisible ? 1 : 0,
+                    }}
+                >
+                    <LeftArrow />
+                </motion.div>
+            )}
+            <div className="grow bg-slate-900 p-4 text-white ">
+                <span className={'font-bold'}>Clue #{index + 1}: </span>
+                {clue}.
+            </div>
+            {isCurrent && (
+                <motion.div
+                    animate={{
+                        opacity:
+                            isRightArrowVisible && index < totalClueLength - 1
+                                ? 1
+                                : 0,
+                        scale: isRightArrowVisible ? 1 : 0,
+                    }}
+                >
+                    <RightArrow />
+                </motion.div>
+            )}
         </motion.div>
+    );
+};
+
+const LeftArrow = () => {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="h-8 w-8"
+        >
+            <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 19.5 8.25 12l7.5-7.5"
+            />
+        </svg>
+    );
+};
+
+const RightArrow = () => {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="h-8 w-8"
+        >
+            <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+            />
+        </svg>
     );
 };
