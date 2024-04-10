@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { motion, PanInfo, useMotionValue } from 'framer-motion';
+import { motion, PanInfo } from 'framer-motion';
 import { cn } from '../lib/util.ts';
 import { item } from '../lib/animations.ts';
 
@@ -77,7 +77,6 @@ interface ClueProps {
     index: number;
     currentDisplayIndex: number;
     clue: string;
-    showArrow: boolean;
     totalClueLength: number;
 }
 
@@ -92,7 +91,21 @@ const Clue = ({
     const isPrevious = index < currentDisplayIndex;
     const isNext = index > currentDisplayIndex;
 
-    const dragX = useMotionValue(0);
+    const [swipeOffset, setSwipeOffset] = useState<number>(0);
+    const [arrowOpacity, setArrowOpacity] = useState<number>(0);
+    const [arrowScale, setArrowScale] = useState<number>(0);
+
+    useEffect(() => {
+        // Arrow scale
+        const scaleVal = 0.4 + Math.abs(swipeOffset) / 400;
+        const scale = Math.min(scaleVal, 1);
+        setArrowScale(scale);
+
+        // Arrow opacity
+        const opacityVal = Math.abs(swipeOffset) / 300;
+        const opacity = Math.min(opacityVal, 1);
+        setArrowOpacity(opacity);
+    }, [swipeOffset]);
 
     const [isLeftArrowVisible, setLeftArrowVisible] = useState<boolean>(false);
     const [isRightArrowVisible, setRightArrowVisible] =
@@ -103,7 +116,7 @@ const Clue = ({
         : {
               x: isPrevious ? '8%' : '-8%',
               scale: 0.95,
-              opacity: 0.2,
+              opacity: 0.1,
           };
 
     const handleDragStart = (
@@ -130,10 +143,10 @@ const Clue = ({
 
     return (
         <motion.div
-            drag={isCurrent ? 'x' : undefined}
+            drag={isCurrent && totalClueLength > 1 ? 'x' : undefined}
             dragConstraints={{ left: 0, right: 0 }}
-            onDrag={(_e, { point }) => {
-                dragX.set(point.x);
+            onDrag={(_e, { offset }) => {
+                setSwipeOffset(offset.x);
             }}
             onDragEnd={handleDragEnd}
             onDragStart={handleDragStart}
@@ -147,17 +160,22 @@ const Clue = ({
             className={cn(
                 'col-start-1 col-end-1 row-start-1 row-end-1 flex w-full flex-row items-center gap-2 self-center overflow-x-hidden',
                 isCurrent
-                    ? 'z-10 cursor-grab justify-self-center'
+                    ? 'z-10 justify-self-center'
                     : '-z-10 w-64 text-ellipsis',
                 isPrevious && 'justify-self-start ',
-                isNext && 'justify-self-end text-ellipsis text-right'
+                isNext && 'justify-self-end text-ellipsis text-right',
+                totalClueLength > 1 && 'cursor-grab'
             )}
         >
             {isCurrent && (
                 <motion.div
-                    animate={{
-                        opacity: isLeftArrowVisible && index > 0 ? 1 : 0,
-                        scale: isLeftArrowVisible ? 1 : 0,
+                    style={{
+                        opacity: arrowOpacity,
+                        scale: arrowScale,
+                        visibility:
+                            isLeftArrowVisible && index > 0
+                                ? 'visible'
+                                : 'hidden',
                     }}
                 >
                     <LeftArrow />
@@ -169,12 +187,13 @@ const Clue = ({
             </div>
             {isCurrent && (
                 <motion.div
-                    animate={{
-                        opacity:
+                    style={{
+                        opacity: arrowOpacity,
+                        scale: arrowScale,
+                        visibility:
                             isRightArrowVisible && index < totalClueLength - 1
-                                ? 1
-                                : 0,
-                        scale: isRightArrowVisible ? 1 : 0,
+                                ? 'visible'
+                                : 'hidden',
                     }}
                 >
                     <RightArrow />
