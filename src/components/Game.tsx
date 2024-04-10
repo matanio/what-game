@@ -105,6 +105,7 @@ export default function Game() {
                 />
                 {[...Array(TOTAL_ATTEMPTS)].map((_, index) => (
                     <GuessAttempt
+                        currentAttempt={currentAttempt}
                         ref={guessAttemptRef}
                         key={index}
                         showInput={index <= currentAttempt - 1}

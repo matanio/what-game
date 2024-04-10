@@ -57,17 +57,33 @@ export interface IconProps {
  * @param date
  */
 export const formatDateAsYearMonthDay = (date: Date): string => {
-    return date.toLocaleString('en-CA').split(', ')[0];
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are 0 indexed so +1 and pad with 0 if needed
+    const day = ('0' + date.getDate()).slice(-2); // Pad with 0 if needed
+    return `${year}-${month}-${day}`;
 };
 
-/**
+/**xx
  * Formats a date as a string in the format "Month Day, Year". e.g. "January 1, 2022".
  * @param date
  */
 export const formatDateAsMonthDayYear = (date: Date): string => {
-    return date.toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-    });
+    const year = date.getFullYear();
+    const monthNames = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+    ];
+    const month = monthNames[date.getMonth()]; // Months are 0 indexed so no need to +1
+    const day = date.getDate();
+    return `${month} ${day}, ${year}`;
 };
