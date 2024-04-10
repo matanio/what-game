@@ -84,12 +84,12 @@ export default function Game() {
             >
                 <motion.div
                     variants={item}
-                    className="grid w-full grid-cols-3 items-center justify-between"
+                    className="grid w-full grid-cols-2 items-center justify-between gap-1 sm:grid-cols-3 sm:gap-0"
                 >
                     <div className="font-semibold">
                         {formatDateAsMonthDayYear(new Date(wordToday!.date))}
                     </div>
-                    <div className="justify-self-center text-center">
+                    <div className="order-3 col-span-2 justify-self-center text-center sm:order-none sm:col-auto">
                         Guess the word!
                     </div>
                     <div className="flex flex-row items-center justify-between gap-2 justify-self-end">
