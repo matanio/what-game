@@ -11,7 +11,7 @@ interface GuessAttemptProps {
     onIncorrect: (guess: string) => void;
     word: string;
     initialGuessText: string;
-    currentAttempt: number;
+    isInstructionsOpen: boolean;
 }
 
 const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
@@ -22,7 +22,7 @@ const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
             onIncorrect,
             word,
             initialGuessText,
-            currentAttempt,
+            isInstructionsOpen,
         }: GuessAttemptProps,
         ref
     ) => {
@@ -90,7 +90,7 @@ const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
             >
                 <input
                     ref={ref}
-                    autoFocus={currentAttempt !== 1}
+                    autoFocus={!isInstructionsOpen}
                     disabled={isDisabled}
                     className={cn(
                         'h-full w-full rounded-lg border-2 border-slate-800 px-4 py-2 text-center text-3xl font-bold uppercase tracking-[0.25em]  placeholder:font-medium placeholder:normal-case placeholder:tracking-wide placeholder:text-slate-300 focus:border-amber-500 focus:bg-slate-50 focus:outline-amber-500 disabled:text-slate-300',
