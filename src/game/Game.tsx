@@ -1,20 +1,25 @@
 import { useRef } from 'react';
 import GuessAttempt from './GuessAttempt.tsx';
 import Clues from './Clues.tsx';
-import { TOTAL_ATTEMPTS, useGameState } from '../lib/game.ts';
+import { TOTAL_ATTEMPTS, useGameState } from './game.ts';
 import { motion } from 'framer-motion';
-import { container, item } from '../lib/animations.ts';
-import InstructionsModal from './InstructionsModal.tsx';
-import useModal, { formatDateAsMonthDayYear } from '../lib/util.ts';
-import ResultsModal from './ResultsModal.tsx';
-import { ScoreButton } from './ScoreButton.tsx';
-import HelpButton from './HelpButton.tsx';
+import { mainContainer, fadeIn } from '../lib/animations.ts';
+import InstructionsModal from '../modals/InstructionsModal.tsx';
+import { formatDateAsMonthDayYear } from '../lib/util.ts';
+import ResultsModal from '../modals/ResultsModal.tsx';
+import { ScoreButton } from '../components/ScoreButton.tsx';
+import HelpButton from '../components/HelpButton.tsx';
+import useModal from '../modals/modal.ts';
 
+/**
+ * Core game component that uses game state and displays the game UI.
+ *
+ * @constructor
+ */
 export default function Game() {
     // Refs
     const guessAttemptRef = useRef<HTMLInputElement>(null);
 
-    // Game state
     const {
         wordToday,
         currentAttempt,
@@ -26,11 +31,13 @@ export default function Game() {
     } = useGameState();
 
     // Modals
+    // Instructions (initially open if game is not over)
     const {
         isOpen: isInstructionsOpen,
         openModal: openInstructions,
         closeModal: closeInstructions,
     } = useModal(!gameResult);
+    // Results (initially open if game is over)
     const {
         isOpen: isResultsOpen,
         closeModal: closeResults,
@@ -41,6 +48,7 @@ export default function Game() {
         closeInstructions();
         guessAttemptRef.current?.focus();
     };
+
     const gameOver = (wasGameSuccess: boolean) => {
         setGameResult({
             wasSolved: wasGameSuccess,
@@ -65,7 +73,6 @@ export default function Game() {
     return (
         <section className="relative grid h-full w-full place-items-center p-4">
             <InstructionsModal
-                totalNumberOfAttempts={TOTAL_ATTEMPTS}
                 showModal={isInstructionsOpen}
                 onClose={handleCloseInstructions}
             />
@@ -77,13 +84,13 @@ export default function Game() {
                 word={wordToday!.word}
             />
             <motion.div
-                variants={container}
+                variants={mainContainer}
                 initial="hidden"
                 animate="show"
                 className="flex h-full w-full max-w-2xl flex-col items-center justify-start gap-4 py-4"
             >
                 <motion.div
-                    variants={item}
+                    variants={fadeIn}
                     className="grid w-full grid-cols-2 items-center justify-between gap-1 sm:grid-cols-3 sm:gap-0"
                 >
                     <div className="font-semibold">
@@ -97,12 +104,16 @@ export default function Game() {
                         <HelpButton onClick={openInstructions} />
                     </div>
                 </motion.div>
+
+                {/* Pass in 1 to N clues, where N is the current attempt */}
                 <Clues
                     clues={Object.values(wordToday!.clues).slice(
                         0,
                         currentAttempt
                     )}
                 />
+
+                {/* Creates a guess attempt for every attempt */}
                 {[...Array(TOTAL_ATTEMPTS)].map((_, index) => (
                     <GuessAttempt
                         isInstructionsOpen={isInstructionsOpen}

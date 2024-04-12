@@ -1,17 +1,11 @@
-import { ModalProps } from '../lib/util.ts';
-import CloseButton from './CloseButton.tsx';
+import CloseButton from '../components/CloseButton.tsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
+import { TOTAL_ATTEMPTS } from '../game/game.ts';
+import { fadeIn, moveUp } from '../lib/animations.ts';
+import { ModalProps } from './modal.ts';
 
-interface InstructionsModalProps {
-    totalNumberOfAttempts: number;
-}
-
-export default function InstructionsModal({
-    totalNumberOfAttempts,
-    showModal,
-    onClose,
-}: InstructionsModalProps & ModalProps) {
+export default function InstructionsModal({ showModal, onClose }: ModalProps) {
     const handleOuterClick = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>
     ) => {
@@ -24,17 +18,18 @@ export default function InstructionsModal({
         <AnimatePresence>
             {showModal && (
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                    variants={fadeIn}
+                    initial="hidden"
+                    animate="show"
+                    exit="hidden"
                     onClick={handleOuterClick}
                     className="absolute z-50 flex h-full w-full items-start justify-center bg-white bg-opacity-90"
                 >
                     <motion.div
-                        initial={{ y: '10%' }}
-                        animate={{ y: 0 }}
-                        exit={{ y: '10%' }}
-                        transition={{ duration: 0.4, ease: 'easeOut' }}
+                        variants={moveUp}
+                        initial="hidden"
+                        animate="show"
+                        exit="hidden"
                         className="m-4 flex max-w-xl flex-col gap-4 rounded-lg bg-white p-8 shadow-xl sm:mt-28"
                     >
                         <div className="flex flex-row justify-between">
@@ -45,9 +40,7 @@ export default function InstructionsModal({
                         </div>
                         <h3 className="text-xl font-light">
                             Guess the word based on the provided clue in{' '}
-                            <span className="font-bold">
-                                {totalNumberOfAttempts}{' '}
-                            </span>
+                            <span className="font-bold">{TOTAL_ATTEMPTS} </span>
                             tries.
                         </h3>
                         <ul className="ms-8 list-outside list-disc ">
@@ -63,7 +56,6 @@ export default function InstructionsModal({
                         </ul>
                         <p>A new word is released daily at midnight.</p>
                         <hr className="my-4" />
-                        {/* Let me know on linked in */}
                         <div className="text-center font-light">
                             <p>
                                 Got some thoughts? Let me know on{' '}

@@ -1,14 +1,14 @@
-import { ModalProps } from '../lib/util.ts';
-import CloseButton from './CloseButton.tsx';
+import CloseButton from '../components/CloseButton.tsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import {
     GameResult,
     generateScoreGridText,
     TOTAL_ATTEMPTS,
-} from '../lib/game.ts';
-import { ScoreGrid } from './ScoreGrid.tsx';
-import CountdownTimer from './CountdownTimer.tsx';
+} from '../game/game.ts';
+import { ScoreGrid } from '../components/ScoreGrid.tsx';
+import CountdownTimer from '../components/CountdownTimer.tsx';
+import { ModalProps } from './modal.ts';
 
 interface ResultsModalProps extends GameResult, ModalProps {
     word: string;
@@ -94,6 +94,7 @@ export default function ResultsModal({
                             wasSolved={wasSolved}
                             numberOfAttempts={numberOfAttempts}
                         />
+
                         {/* Share Button */}
                         <button
                             className="rounded-lg bg-slate-800 px-4 py-2 font-semibold text-white transition-colors hover:bg-slate-600"
@@ -101,6 +102,7 @@ export default function ResultsModal({
                         >
                             {shareButtonText}
                         </button>
+
                         <hr />
 
                         <div className="flex flex-col items-center justify-center ">

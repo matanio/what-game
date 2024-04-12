@@ -1,16 +1,15 @@
 import Header from './components/Header.tsx';
-import StartScreen from './components/StartScreen.tsx';
+import StartScreen from './screens/StartScreen.tsx';
 import Footer from './components/Footer.tsx';
-import Game from './components/Game.tsx';
+import Game from './game/Game.tsx';
 import { useState } from 'react';
-import LoadingScreen from './components/LoadingScreen.tsx';
-import { useGameState } from './lib/game.ts';
-import ErrorScreen from './components/ErrorScreen.tsx';
+import LoadingScreen from './screens/LoadingScreen.tsx';
+import { useGameState } from './game/game.ts';
+import ErrorScreen from './screens/ErrorScreen.tsx';
 
 function App() {
     // States
     const [showGame, setShowGame] = useState<boolean>(false);
-
     const { isLoading, error } = useGameState();
 
     const startGame = () => {

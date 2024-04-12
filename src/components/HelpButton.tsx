@@ -4,6 +4,12 @@ interface HelpButtonProps {
     onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
+/**
+ * A reusable help button with a question mark icon.
+ *
+ * @param onClick
+ * @constructor
+ */
 export default function HelpButton({ onClick }: HelpButtonProps) {
     return (
         <button

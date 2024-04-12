@@ -1,9 +1,20 @@
-import { cn, IconProps } from '../lib/util.ts';
+import { cn } from '../lib/util.ts';
 import { motion } from 'framer-motion';
 import { forwardRef } from 'react';
 
-const Logo = forwardRef<SVGSVGElement, IconProps>(
-    ({ className }: IconProps, ref) => {
+export interface LogoProps {
+    className?: string;
+}
+
+/**
+ * The game / site logo. LogoMotion is the animated framer-motion version.
+ *
+ * @param className
+ * @param ref
+ * @constructor
+ */
+const Logo = forwardRef<SVGSVGElement, LogoProps>(
+    ({ className }: LogoProps, ref) => {
         return (
             <svg
                 ref={ref}

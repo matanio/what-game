@@ -1,4 +1,4 @@
-import { formatDateAsYearMonthDay } from './util.ts';
+import { formatDateAsYearMonthDay } from '../lib/util.ts';
 import { GameContext } from '../contexts/GameContextProvider.tsx';
 import { useContext } from 'react';
 
@@ -7,7 +7,7 @@ export const TOTAL_ATTEMPTS: number = 6;
 export type WordToday = {
     word: string;
     clues: Record<number, string>;
-    date: string; // YYYY-MM-DD
+    date: string; // YYYY-MM-DD format
     author: string;
 };
 
@@ -24,7 +24,8 @@ export interface GameResult {
 }
 
 /**
- * @throws Error if no data available for the given date
+ * Fetches the word data for a given date.
+ * @throws NotFoundError if no data available for the given date.
  * @param date
  */
 const fetchWordInfoByDate = async (date: Date): Promise<WordToday> => {
@@ -41,6 +42,8 @@ const fetchWordInfoByDate = async (date: Date): Promise<WordToday> => {
 let cachedWordInfo: WordToday | null = null;
 
 /**
+ * Returns the word data for today.
+ *
  * @throws NotFoundError if no data available for today.
  * @see fetchWordInfoByDate
  */
@@ -51,6 +54,12 @@ export const getToday = async (): Promise<WordToday> => {
     return today;
 };
 
+/**
+ * Returns a string representation of the score grid using emojis.
+ *
+ * @param wasSolved
+ * @param numberOfAttempts
+ */
 export const generateScoreGridText = (
     wasSolved: boolean,
     numberOfAttempts: number
@@ -67,10 +76,19 @@ export const generateScoreGridText = (
     return scoreGridInText;
 };
 
+/**
+ * Asserts if two words are equal, ignoring case.
+ *
+ * @param wordOne
+ * @param wordTwo
+ */
 export const isWordsEqual = (wordOne: string, wordTwo: string): boolean => {
     return wordOne.toLowerCase() === wordTwo.toLowerCase();
 };
 
+/**
+ * Custom hook to access the game state.
+ */
 export const useGameState = () => {
     const context = useContext(GameContext);
 

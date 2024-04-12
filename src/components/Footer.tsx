@@ -1,9 +1,7 @@
-import Container from './Container.tsx';
-
 export default function Footer() {
     return (
-        <footer className="bg-slate-200 py-8">
-            <Container>
+        <footer className="bg-slate-200 py-10">
+            <div className="container mx-auto px-4">
                 <div className="flex justify-center">
                     <p className="text-sm">
                         🚀 by{' '}
@@ -17,7 +15,7 @@ export default function Footer() {
                         .
                     </p>
                 </div>
-            </Container>
+            </div>
         </footer>
     );
 }

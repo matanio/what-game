@@ -1,8 +1,13 @@
-import { GameResult, TOTAL_ATTEMPTS } from '../lib/game.ts';
+import { GameResult, TOTAL_ATTEMPTS } from '../game/game.ts';
 import React from 'react';
 
-// A visual representation of the score
-
+/**
+ * A visual representation of the score.
+ *
+ * @param wasSolved
+ * @param numberOfAttempts
+ * @constructor
+ */
 export function ScoreGrid({ wasSolved, numberOfAttempts }: GameResult) {
     let gridItems: React.JSX.Element[];
     if (!wasSolved) {

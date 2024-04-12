@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { NotFoundError } from '../lib/game.ts';
+import { NotFoundError } from '../game/game.ts';
 
 interface ErrorScreenProps {
     error: Error;

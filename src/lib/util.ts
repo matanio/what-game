@@ -30,28 +30,6 @@ export function clearLocalStorage(key: string) {
     window.localStorage.removeItem(key);
 }
 
-export default function useModal(initialOpenState: boolean = true) {
-    const [isOpen, setIsOpen] = useState<boolean>(initialOpenState);
-    const closeModal = () => {
-        setIsOpen(false);
-    };
-
-    const openModal = () => {
-        setIsOpen(true);
-    };
-
-    return { isOpen, closeModal, openModal };
-}
-
-export interface ModalProps {
-    showModal: boolean;
-    onClose: () => void;
-}
-
-export interface IconProps {
-    className?: string;
-}
-
 /**
  * Formats a date as a string in the format "YYYY-MM-DD". e,g. "2022-01-01".
  * @param date
@@ -61,6 +39,14 @@ export const formatDateAsYearMonthDay = (date: Date): string => {
     const month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are 0 indexed so +1 and pad with 0 if needed
     const day = ('0' + date.getDate()).slice(-2); // Pad with 0 if needed
     return `${year}-${month}-${day}`;
+};
+
+/**
+ * Uses regex to check if a string contains only letters.
+ * @param str
+ */
+export const isOnlyLetters = (str: string): boolean => {
+    return /^[a-zA-Z]*$/.test(str);
 };
 
 /**xx

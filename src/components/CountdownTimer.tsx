@@ -1,5 +1,16 @@
 import { useEffect, useState } from 'react';
 
+interface Countdown {
+    hours: number;
+    minutes: number;
+    seconds: number;
+}
+
+/**
+ * A countdown timer that shows the time left until midnight.
+ *
+ * @constructor
+ */
 export default function CountdownTimer() {
     const calculateTimeLeft = (now: Date): Countdown => {
         const midnight = new Date(now);
@@ -42,10 +53,4 @@ export default function CountdownTimer() {
             </span>
         </div>
     );
-}
-
-interface Countdown {
-    hours: number;
-    minutes: number;
-    seconds: number;
 }

@@ -4,6 +4,12 @@ interface ScoreButtonProps {
     onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
+/**
+ * A reusable score button with a graph icon.
+ *
+ * @param onClick
+ * @constructor
+ */
 export function ScoreButton({ onClick }: ScoreButtonProps) {
     return (
         <button

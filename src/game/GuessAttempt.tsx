@@ -1,9 +1,9 @@
 import React, { forwardRef, useEffect } from 'react';
 import BlankWordInput from './BlankWordInput.tsx';
 import { motion } from 'framer-motion';
-import { item } from '../lib/animations.ts';
-import { cn } from '../lib/util.ts';
-import { isWordsEqual } from '../lib/game.ts';
+import { fadeIn } from '../lib/animations.ts';
+import { cn, isOnlyLetters } from '../lib/util.ts';
+import { isWordsEqual } from './game.ts';
 
 interface GuessAttemptProps {
     showInput: boolean;
@@ -14,6 +14,9 @@ interface GuessAttemptProps {
     isInstructionsOpen: boolean;
 }
 
+/**
+ * The user input for guessing the word.
+ */
 const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
     (
         {
@@ -32,11 +35,10 @@ const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
 
         const [color, setColor] = React.useState<string>();
 
+        // Check if the guess is correct on initial render (used for local storage)
         useEffect(() => {
             if (initialGuessText !== '') {
-                // Check if the guess is correct
                 const isCorrect = isWordsEqual(guess, word);
-                // Disable the input and color the guess appropriately
                 setIsDisabled(true);
                 colorGuess(isCorrect);
             }
@@ -51,6 +53,7 @@ const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
                 handleSubmitPressed();
                 return;
             }
+            // Don't allow non-letter characters
             if (!isOnlyLetters(keyValue)) event.preventDefault();
         };
 
@@ -59,10 +62,12 @@ const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
         };
 
         const colorGuess = (isCorrect: boolean) => {
+            // Colors
+            const correctColor =
+                'disabled:text-green-800 disabled:border-green-800 disabled:bg-green-400';
+
             if (isCorrect) {
-                setColor(
-                    'disabled:text-green-800 disabled:border-green-800 disabled:bg-green-400'
-                );
+                setColor(correctColor);
             }
         };
 
@@ -71,9 +76,8 @@ const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
             if (isDisabled) return;
             if (!isGuessValid()) return;
 
-            // Check if the guess is correct
             const isCorrect = isWordsEqual(guess, word);
-            // Disable the input and color the guess appropriately
+
             setIsDisabled(true);
             colorGuess(isCorrect);
             if (isCorrect) {
@@ -85,7 +89,7 @@ const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
 
         return showInput ? (
             <motion.div
-                variants={item}
+                variants={fadeIn}
                 className="flex h-14 w-full flex-row gap-2"
             >
                 <input
@@ -117,11 +121,3 @@ const GuessAttempt = forwardRef<HTMLInputElement, GuessAttemptProps>(
     }
 );
 export default GuessAttempt;
-
-/**
- * Uses regex to check if a string contains only letters.
- * @param str
- */
-const isOnlyLetters = (str: string): boolean => {
-    return /^[a-zA-Z]*$/.test(str);
-};

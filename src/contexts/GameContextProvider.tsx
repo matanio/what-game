@@ -1,4 +1,4 @@
-import { GameResult, getToday, WordToday } from '../lib/game.ts';
+import { GameResult, getToday, WordToday } from '../game/game.ts';
 import { createContext, ReactNode, useEffect, useState } from 'react';
 import {
     clearLocalStorage,
@@ -25,6 +25,12 @@ interface GameContextProviderProps {
     children: ReactNode;
 }
 
+/**
+ * The context provider for the game state.
+ *
+ * @param children
+ * @constructor
+ */
 export const GameContextProvider = ({ children }: GameContextProviderProps) => {
     // States
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -43,6 +49,13 @@ export const GameContextProvider = ({ children }: GameContextProviderProps) => {
         'gameResult',
         null
     );
+
+    const clearLocalState = () => {
+        clearLocalStorage('wordToday');
+        clearLocalStorage('currentAttempt');
+        clearLocalStorage('gameResult');
+        clearLocalStorage('guesses');
+    };
 
     const [guesses, setGuesses] = useLocalStorage<string[]>('guesses', []);
 
@@ -67,8 +80,8 @@ export const GameContextProvider = ({ children }: GameContextProviderProps) => {
                 });
         };
 
-        const delay = 500;
-        // Load the game data with a delay to show the loading screen
+        // Load the game data with some artificial delay to show the loading screen
+        const LOADING_DELAY = 500;
         setTimeout(() => {
             // If there is no word today stored, fetch the game as it is new
             if (!wordToday) {
@@ -76,24 +89,17 @@ export const GameContextProvider = ({ children }: GameContextProviderProps) => {
                 return;
             }
 
-            // If there is a wordToday stored, but no game result, we are mid game; do nothing
-            if (!gameResult) {
-                setIsLoading(false);
-                return;
-            }
-            // If we do have a game result, but it was for a different day, clear the state and fetch the game
+            // If we do have a wordToday stored, but it was for a different day, clear the state and fetch the game
             if (wordToday.date !== formatDateAsYearMonthDay(new Date())) {
-                clearLocalStorage('wordToday');
-                clearLocalStorage('currentAttempt');
-                clearLocalStorage('gameResult');
-                clearLocalStorage('guesses');
+                clearLocalState();
                 fetchGame();
             }
 
-            // If we have a game result for today, and the day is still today, skip straight to the screen
+            //  If we do have a wordToday stored, the date is today, but no gameResult, we are either mid-game have completed it.
+            //  Either way, just load the game.
             setIsLoading(false);
-        }, delay);
-    });
+        }, LOADING_DELAY);
+    }, [gameResult, setWordToday, wordToday]);
 
     return (
         <GameContext.Provider
