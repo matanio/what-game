@@ -11,7 +11,6 @@ export default function Clues({ clues }: CluesProps) {
     const [currentClueIndex, setCurrentClueIndex] = useState<number>(0);
 
     useEffect(() => {
-        console.log(clues);
         if (!clues) return;
         setCurrentClueIndex(clues.length - 1);
     }, [clues]);
@@ -163,7 +162,7 @@ const Clue = ({
                     ? 'z-10 justify-self-center'
                     : '-z-10 w-64 text-ellipsis',
                 isPrevious && 'justify-self-start ',
-                isNext && 'justify-self-end text-ellipsis text-right',
+                isNext && 'justify-self-end text-right',
                 totalClueLength > 1 && 'cursor-grab'
             )}
         >
@@ -181,7 +180,7 @@ const Clue = ({
                     <LeftArrow />
                 </motion.div>
             )}
-            <div className="grow bg-slate-900 p-4 text-white ">
+            <div className={cn("grow bg-slate-900 p-4 text-white", (isNext || isPrevious) && 'truncate')}>
                 <span className={'font-bold'}>Clue #{index + 1}: </span>
                 {clue}.
             </div>

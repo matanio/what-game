@@ -73,7 +73,7 @@ export default function ResultsModal({
                             duration: 0.4,
                             ease: 'easeOut',
                         }}
-                        className="mx-4 mt-28 flex max-w-2xl grow flex-col content-center items-center gap-4 rounded-lg bg-white px-4 py-6 shadow-xl sm:p-8"
+                        className="mx-4 mt-16 flex max-w-2xl grow flex-col content-center items-center gap-4 rounded-lg bg-white px-4 py-6 shadow-xl sm:mt-28 sm:p-8"
                     >
                         <div className="flex w-full min-w-fit flex-row items-center justify-end gap-2 sm:relative">
                             <h2 className="w-full text-wrap text-center text-2xl font-semibold sm:absolute">
