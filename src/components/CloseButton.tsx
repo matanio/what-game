@@ -1,14 +1,21 @@
+import { MouseEventHandler } from 'react';
+
 interface CloseButtonProps {
-    onClick: () => void;
+    onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
+/**
+ * A reusable close button with an X icon.
+ *
+ * @param onClick
+ * @constructor
+ */
 export default function CloseButton({ onClick }: CloseButtonProps) {
     return (
         <button
             className="grid place-items-center p-1 text-slate-900"
             onClick={onClick}
         >
-            {/* From Heroicons */}
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
