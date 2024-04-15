@@ -12,6 +12,7 @@ import { ModalProps } from './modal.ts';
 
 interface ResultsModalProps extends GameResult, ModalProps {
     word: string;
+    id: number;
 }
 
 export default function ResultsModal({
@@ -20,6 +21,7 @@ export default function ResultsModal({
     showModal,
     onClose,
     word,
+    id,
 }: ResultsModalProps) {
     const [message, setMessage] = useState<string>('');
     const [shareButtonText, setShareButtonText] =
@@ -35,7 +37,7 @@ export default function ResultsModal({
             numberOfAttempts
         );
 
-        const results = `What #1 ${wasSolved ? numberOfAttempts : 'X'}/${TOTAL_ATTEMPTS}${scoreGridInText}`;
+        const results = `What #${id} ${wasSolved ? numberOfAttempts : 'X'}/${TOTAL_ATTEMPTS}${scoreGridInText}`;
 
         navigator.clipboard.writeText(results).then(() => {
             setShareButtonText('Copied!');
@@ -83,7 +85,7 @@ export default function ResultsModal({
                                 <CloseButton onClick={onClose} />
                             </span>
                         </div>
-                        <h3 className="text-xl font-light">What #103</h3>
+                        <h3 className="text-xl font-light">What #{id}</h3>
                         <p className="font-extrabold uppercase">
                             <span>"{word}"</span>
                         </p>
