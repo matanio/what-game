@@ -69,6 +69,7 @@ export const GameContextProvider = ({ children }: GameContextProviderProps) => {
 
     useEffect(() => {
         const fetchGame = () => {
+            clearLocalState();
             getToday()
                 .then(today => {
                     setWordToday(today);
@@ -91,15 +92,15 @@ export const GameContextProvider = ({ children }: GameContextProviderProps) => {
 
             // If we do have a wordToday stored, but it was for a different day, clear the state and fetch the game
             if (wordToday.date !== formatDateAsYearMonthDay(new Date())) {
-                clearLocalState();
                 fetchGame();
+                return;
             }
 
-            //  If we do have a wordToday stored, the date is today, but no gameResult, we are either mid-game have completed it.
+            //  If we do have a wordToday stored, the date is today, we are either mid-game or have completed it.
             //  Either way, just load the game.
             setIsLoading(false);
         }, LOADING_DELAY);
-    }, [gameResult, setWordToday, wordToday]);
+    }, [setWordToday, wordToday]);
 
     return (
         <GameContext.Provider
