@@ -31,27 +31,15 @@ export const moveUp: Variants = {
 
 export const notActiveClueVariant: Variants = {
     show: isPrevious => ({
-        x: isPrevious ? '8%' : '-8%',
-        scale: 0.95,
-        opacity: 0.1,
-        transition: { type: 'spring', stiffness: 500, damping: 30 },
+        scale: 0.9,
+        x: isPrevious ? -12.2 : 12.2,
+        opacity: 0.035,
+        transition: {
+            duration: 0.1,
+            ease: 'easeIn',
+        },
     }),
-    hidden: isPrevious => ({
-        x: isPrevious ? '8%' : '-8%',
-        scale: 0.95,
-        opacity: 0,
-    }),
-};
-
-export const activeClueVariant: Variants = {
-    show: {
-        x: 0,
-        scale: 1,
-        opacity: 1,
-    },
     hidden: {
-        x: '-8%',
-        scale: 0.95,
         opacity: 0,
     },
 };

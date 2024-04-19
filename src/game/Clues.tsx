@@ -8,7 +8,7 @@ interface CluesProps {
 }
 
 /**
- * Displays a list of clues with a swipe-able interface.
+ * Displays a list of clues with a swipe-able / click-able interface.
  *
  * @param clues
  * @constructor
@@ -66,6 +66,8 @@ export default function Clues({ clues }: CluesProps) {
                             onDragEnd={onDragEnd}
                             currentDisplayIndex={currentClueIndex}
                             totalClueLength={clues.length}
+                            onClickNext={nextClue}
+                            onClickPrevious={previousClue}
                         />
                     );
                 })}
