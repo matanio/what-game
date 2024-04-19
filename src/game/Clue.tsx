@@ -18,7 +18,7 @@ interface ClueProps {
 }
 
 /**
- * A clue component that displays a clue and allows the user to swipe to the next or previous clue.
+ * A clue component that displays a clue and allows the user to swipe or button press to the next or previous clue.
  * It is also used for rendering of the 'previous' or 'next' clue.
  *
  * @param onDragEnd

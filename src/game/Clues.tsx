@@ -8,7 +8,7 @@ interface CluesProps {
 }
 
 /**
- * Displays a list of clues with a swipe-able interface.
+ * Displays a list of clues with a swipe-able / click-able interface.
  *
  * @param clues
  * @constructor
