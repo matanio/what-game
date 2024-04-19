@@ -55,6 +55,10 @@ export const GameContextProvider = ({ children }: GameContextProviderProps) => {
         clearLocalStorage('currentAttempt');
         clearLocalStorage('gameResult');
         clearLocalStorage('guesses');
+        setWordToday(null);
+        setCurrentAttempt(1);
+        setGameResult(null);
+        setGuesses([]);
     };
 
     const [guesses, setGuesses] = useLocalStorage<string[]>('guesses', []);
