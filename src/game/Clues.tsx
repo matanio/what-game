@@ -66,6 +66,8 @@ export default function Clues({ clues }: CluesProps) {
                             onDragEnd={onDragEnd}
                             currentDisplayIndex={currentClueIndex}
                             totalClueLength={clues.length}
+                            onClickNext={nextClue}
+                            onClickPrevious={previousClue}
                         />
                     );
                 })}
