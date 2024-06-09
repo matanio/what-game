@@ -95,7 +95,7 @@ export const GameContextProvider = ({ children }: GameContextProviderProps) => {
         };
 
         // Load the game data with some artificial delay to show the loading screen
-        const LOADING_DELAY = 500;
+        const LOADING_DELAY = 700;
         setTimeout(() => {
             // If there is no word today stored, fetch the game as it is new
             if (!wordToday) {

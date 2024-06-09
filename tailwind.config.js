@@ -4,7 +4,7 @@ export default {
     theme: {
         extend: {
             animation: {
-                extendWidth: 'extendWidth 0.5s linear forwards',
+                extendWidth: 'extendWidth 0.7s linear forwards',
             },
             keyframes: {
                 extendWidth: {
