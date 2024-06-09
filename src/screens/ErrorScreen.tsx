@@ -5,7 +5,7 @@ import {
     WordToday,
 } from '../game/game.ts';
 import { useEffect, useState } from 'react';
-import { GalleryCardMotion } from '../components/GalleryCard.tsx';
+import GalleryCard from '../components/GalleryCard.tsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import { galleryCard, previousWordsContainer } from '../lib/animations.ts';
 
@@ -71,12 +71,16 @@ export default function ErrorScreen({ error }: ErrorScreenProps) {
                         </p>
                         <motion.div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {previousWords.map(word => (
-                                <GalleryCardMotion
+                                <motion.div
                                     variants={galleryCard}
-                                    word={word}
                                     key={word.date}
-                                    clickHandler={handleCardClick}
-                                />
+                                >
+                                    <GalleryCard
+                                        word={word}
+                                        key={word.date}
+                                        clickHandler={handleCardClick}
+                                    />
+                                </motion.div>
                             ))}
                         </motion.div>
                     </motion.div>
