@@ -56,6 +56,27 @@ export const getToday = async (): Promise<WordToday> => {
 };
 
 /**
+ * Returns all previous word data (i.e. a list of records from api/data)
+ * @throws Error if dates.json can't be found / turned into json.
+ */
+export const getPreviousWords = async (): Promise<WordToday[]> => {
+    const response = await fetch('api/data/dates.json');
+    const dates = (await response.json()) as string[]; // assuming dates are strings in YYYY-MM-DD format
+    const previousWords: WordToday[] = [];
+
+    for (const date of dates) {
+        try {
+            const word = await fetchWordInfoByDate(new Date(date));
+            previousWords.push(word);
+        } catch (e) {
+            // Handle error if necessary
+        }
+    }
+
+    return previousWords;
+};
+
+/**
  * Returns a string representation of the score grid using emojis.
  *
  * @param wasSolved
