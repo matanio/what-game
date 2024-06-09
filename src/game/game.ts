@@ -109,7 +109,7 @@ export const isWordsEqual = (wordOne: string, wordTwo: string): boolean => {
 };
 
 /**
- * Custom hook to access the game state.
+ * Custom hook to access the (daily) game state.
  */
 export const useGameState = () => {
     const context = useContext(GameContext);

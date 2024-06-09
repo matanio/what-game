@@ -9,6 +9,7 @@ import {
 interface GameStateContext {
     wordToday: WordToday | null;
     setWordToday: (wordToday: WordToday) => void;
+    startGameWithPreviousWord: (word: WordToday) => void;
     currentAttempt: number;
     gameResult: GameResult | null;
     guesses: string[];
@@ -71,6 +72,14 @@ export const GameContextProvider = ({ children }: GameContextProviderProps) => {
         setCurrentAttempt(currentAttempt + 1);
     };
 
+    const startGameWithPreviousWord = (word: WordToday) => {
+        clearLocalState();
+        setError(null); // Required so that the error screen does not show up
+        setWordToday(word);
+        setIsLoading(false);
+    };
+
+    // Core load game logic
     useEffect(() => {
         const fetchGame = () => {
             clearLocalState();
@@ -95,6 +104,7 @@ export const GameContextProvider = ({ children }: GameContextProviderProps) => {
             }
 
             // If we do have a wordToday stored, but it was for a different day, clear the state and fetch the game
+            // This also means that we ignore the state of any 'previous' game that was in progress
             if (wordToday.date !== formatDateAsYearMonthDay(new Date())) {
                 fetchGame();
                 return;
@@ -104,13 +114,14 @@ export const GameContextProvider = ({ children }: GameContextProviderProps) => {
             //  Either way, just load the game.
             setIsLoading(false);
         }, LOADING_DELAY);
-    }, [setWordToday, wordToday]);
+    }, []);
 
     return (
         <GameContext.Provider
             value={{
                 wordToday,
                 setWordToday,
+                startGameWithPreviousWord,
                 currentAttempt,
                 gameResult,
                 guesses,

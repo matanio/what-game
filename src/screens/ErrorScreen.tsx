@@ -1,4 +1,9 @@
-import { getPreviousWords, NotFoundError, WordToday } from '../game/game.ts';
+import {
+    getPreviousWords,
+    NotFoundError,
+    useGameState,
+    WordToday,
+} from '../game/game.ts';
 import { useEffect, useState } from 'react';
 import GalleryCard from '../components/GalleryCard.tsx';
 
@@ -10,6 +15,8 @@ export default function ErrorScreen({ error }: ErrorScreenProps) {
     const isNotFoundError = error instanceof NotFoundError;
     const [previousWords, setPreviousWords] = useState<WordToday[]>([]);
 
+    const { startGameWithPreviousWord } = useGameState();
+
     useEffect(() => {
         if (!isNotFoundError) return;
         getPreviousWords().then(words => {
@@ -20,7 +27,7 @@ export default function ErrorScreen({ error }: ErrorScreenProps) {
     }, [isNotFoundError]);
 
     const handleCardClick = (word: WordToday) => {
-        console.log(word);
+        startGameWithPreviousWord(word);
     };
 
     return (
