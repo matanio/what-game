@@ -33,7 +33,7 @@ export default function ErrorScreen({ error }: ErrorScreenProps) {
     };
 
     return (
-        <div className="h-full w-full pb-12">
+        <div className="h-full w-full px-4 pb-12">
             <div className="mt-28 flex flex-col items-center justify-center gap-4">
                 <h1 className="text-center text-4xl font-extrabold text-slate-900">
                     {isNotFoundError
@@ -45,7 +45,7 @@ export default function ErrorScreen({ error }: ErrorScreenProps) {
                         ? "Hmm. It doesn't look like today's word has been set 😅. Apologies — please check back later!"
                         : 'Please refresh the page to try again.'}
                 </p>
-                <p>
+                <p className="text-center">
                     Want to submit a word? Get in touch on{' '}
                     <a
                         href="https://www.linkedin.com/in/matan-yosef-59970b219/"
