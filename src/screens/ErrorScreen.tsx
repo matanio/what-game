@@ -16,16 +16,27 @@ interface ErrorScreenProps {
 export default function ErrorScreen({ error }: ErrorScreenProps) {
     const isNotFoundError = error instanceof NotFoundError;
     const [previousWords, setPreviousWords] = useState<WordToday[]>([]);
+    const [isLoadingPreviousWords, setIsLoadingPreviousWords] = useState(true);
+    const [errorLoadingPreviousWords, setErrorLoadingPreviousWords] =
+        useState<boolean>(false);
 
     const { startGameWithPreviousWord } = useGameState();
 
     useEffect(() => {
         if (!isNotFoundError) return;
-        getPreviousWords().then(words => {
-            if (words.length > 0) {
-                setPreviousWords(words);
-            }
-        });
+        setIsLoadingPreviousWords(true);
+        getPreviousWords()
+            .then(words => {
+                if (words.length > 0) {
+                    setPreviousWords(words);
+                }
+            })
+            .catch(() => {
+                setErrorLoadingPreviousWords(true);
+            })
+            .finally(() => {
+                setIsLoadingPreviousWords(false);
+            });
     }, [isNotFoundError]);
 
     const handleCardClick = (word: WordToday) => {
@@ -33,7 +44,7 @@ export default function ErrorScreen({ error }: ErrorScreenProps) {
     };
 
     return (
-        <div className="h-full w-full pb-12">
+        <div className="h-full w-full px-4 pb-12">
             <div className="mt-28 flex flex-col items-center justify-center gap-4">
                 <h1 className="text-center text-4xl font-extrabold text-slate-900">
                     {isNotFoundError
@@ -45,7 +56,7 @@ export default function ErrorScreen({ error }: ErrorScreenProps) {
                         ? "Hmm. It doesn't look like today's word has been set 😅. Apologies — please check back later!"
                         : 'Please refresh the page to try again.'}
                 </p>
-                <p>
+                <p className="text-center">
                     Want to submit a word? Get in touch on{' '}
                     <a
                         href="https://www.linkedin.com/in/matan-yosef-59970b219/"
@@ -58,33 +69,47 @@ export default function ErrorScreen({ error }: ErrorScreenProps) {
                     .
                 </p>
             </div>
+            <p className="py-4 text-center text-gray-400">
+                or, check out a previous day!
+            </p>
+            {isLoadingPreviousWords && (
+                <p className="py-4 text-center text-gray-300">
+                    Loading words...
+                </p>
+            )}
+            {errorLoadingPreviousWords && (
+                <p className="py-4 text-center text-red-400">
+                    Hmm. There was an error loading the previous words. Please
+                    refresh the page to try again.
+                </p>
+            )}
             <AnimatePresence>
-                {isNotFoundError && previousWords.length > 0 && (
-                    <motion.div
-                        className="flex flex-col items-center justify-center gap-4"
-                        variants={previousWordsContainer}
-                        initial="hidden"
-                        animate="show"
-                    >
-                        <p className="py-4 text-center text-gray-400">
-                            or, choose a previous day!
-                        </p>
-                        <motion.div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                            {previousWords.map(word => (
-                                <motion.div
-                                    variants={galleryCard}
-                                    key={word.date}
-                                >
-                                    <GalleryCard
-                                        word={word}
+                {!isLoadingPreviousWords &&
+                    !errorLoadingPreviousWords &&
+                    isNotFoundError &&
+                    previousWords.length > 0 && (
+                        <motion.div
+                            className="flex flex-col items-center justify-center gap-4"
+                            variants={previousWordsContainer}
+                            initial="hidden"
+                            animate="show"
+                        >
+                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                {previousWords.map(word => (
+                                    <motion.div
+                                        variants={galleryCard}
                                         key={word.date}
-                                        clickHandler={handleCardClick}
-                                    />
-                                </motion.div>
-                            ))}
+                                    >
+                                        <GalleryCard
+                                            word={word}
+                                            key={word.date}
+                                            clickHandler={handleCardClick}
+                                        />
+                                    </motion.div>
+                                ))}
+                            </div>
                         </motion.div>
-                    </motion.div>
-                )}
+                    )}
             </AnimatePresence>
         </div>
     );
