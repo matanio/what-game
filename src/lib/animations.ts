@@ -1,5 +1,18 @@
 import { Variants } from 'framer-motion';
 
+export const extendWidth: Variants = {
+    initial: {
+        width: '0%',
+    },
+    animate: {
+        width: '100%',
+        transition: {
+            duration: 0.7,
+            ease: 'linear',
+        },
+    },
+};
+
 export const mainContainer: Variants = {
     hidden: { y: '2%', opacity: 0 },
     show: {
